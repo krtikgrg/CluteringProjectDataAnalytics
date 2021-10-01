@@ -77,6 +77,32 @@ def plotValueDistro(valData):
     ## plt.show()
     # ax.ticklabel_format(useOffset=True)
 
+def plotFootDistro(footData):
+    # Counting number of left footers and right footers, noise/errors are ignored
+    counters = []
+    lefters = 0
+    righters = 0
+    for foot in footData:
+        if isinstance(foot, str):
+            if foot[0] == 'L':
+                lefters += 1
+            elif foot[0] == 'R':
+                righters += 1
+
+    #defining various variable objects that are required to draw bar graph
+    counters.append(lefters)
+    counters.append(righters)
+    tick_label = ['Left','Right']
+    startIndex = [1,2]
+
+    #creating Bar graph
+    ## fig, ax = plt.subplots(figsize =(10, 7))
+    ## ax.bar(startIndex,counters,tick_label = tick_label,width = 0.8)
+
+    #Show plot
+    ## plt.show()
+
 def analyse(data):
     plotAgeDistro(data['Age'])
     plotValueDistro(data['Value'])
+    plotFootDistro(data["Preferred Foot"])
