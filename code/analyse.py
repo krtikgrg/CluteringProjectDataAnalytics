@@ -129,9 +129,47 @@ def plotReputationDistro(repuData):
 
     #Show plot
     ## plt.show()
+
+def plotBodyTypeDistro(bodyData):
+    # Getting all unique values in the given body type data set
+    sampleSpace = bodyData.unique()
+
+    # variables for graph
+    tick_label = []
+    startIndex = []
+
+    # BookKeeping variables
+    counters = []
+    index = 0
+    MP = {}
+
+    # preparing lists in order to develop counters list
+    for typ in sampleSpace:
+        tick_label.append(typ)
+        MP[typ] = index
+        counters.append(0)
+        index += 1
+        startIndex.append(index)
     
+    #devoloping counters list
+    for typ in bodyData:
+        counters[MP[typ]] += 1
+    
+    #creating Bar graph
+    fig, ax = plt.subplots(figsize =(10, 7))
+    arr = ax.bar(startIndex,counters,tick_label = tick_label,width = 0.8)
+    # displaying values over each bar in the graph
+    for rect in arr:
+        height = rect.get_height()
+        ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,'%d' % int(height),ha='center', va='bottom')
+
+    #Show plot
+    plt.show()
+    
+
 def analyse(data):
     plotAgeDistro(data['Age'])
     plotValueDistro(data['Value'])
     plotFootDistro(data["Preferred Foot"])
     plotReputationDistro(data["International Reputation"])
+    plotBodyTypeDistro(data['Body Type'])
