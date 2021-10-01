@@ -156,20 +156,74 @@ def plotBodyTypeDistro(bodyData):
         counters[MP[typ]] += 1
     
     #creating Bar graph
-    fig, ax = plt.subplots(figsize =(10, 7))
-    arr = ax.bar(startIndex,counters,tick_label = tick_label,width = 0.8)
+    ## fig, ax = plt.subplots(figsize =(10, 7))
+    ## arr = ax.bar(startIndex,counters,tick_label = tick_label,width = 0.8)
     # displaying values over each bar in the graph
-    for rect in arr:
-        height = rect.get_height()
-        ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,'%d' % int(height),ha='center', va='bottom')
+    ## for rect in arr:
+        ## height = rect.get_height()
+        ## ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,'%d' % int(height),ha='center', va='bottom')
 
     #Show plot
-    plt.show()
+    ## plt.show()
     
+def plotClubsvsAvgWt(dataClub, dataWt):
+    # Getting unique clubs
+    uniqueClubs = set(dataClub)
+    uniqueClubs = (list(uniqueClubs))
+    # Book keeping variables
+    MPCLUBTOINDEX = {}
+    totWeightPerClub = []
+    totNumPerClub = []
+    # initialising
+    for index in range(len(uniqueClubs)):
+        MPCLUBTOINDEX[uniqueClubs[index]] = index
+        totWeightPerClub.append(0)
+        totNumPerClub.append(0)
+    # calculating sum of weights for all the clubs 
+    for index in range(len(dataWt)):
+        if isinstance(dataWt[index], str):
+            weight = dataWt[index]
+            club = dataClub[index]
+            weight = weight[:-3]
+            weight = int(weight)
+            totWeightPerClub[MPCLUBTOINDEX[club]] += weight
+            totNumPerClub[MPCLUBTOINDEX[club]] += 1
+    
+    # variable that will ultiately be used to draw the graph
+    avgWeightPerClub = []
+    clubs = []
+    # selecting the clubs that are at interval of 75 from the list of all unique clubs
+    # All clubs can also be plotted but it will not be human interpretable 
+    STEP = 75
+    # calculating avg weights for clubs at an interval of 75
+    for index in range(0,len(totWeightPerClub),STEP):
+        value = totWeightPerClub[index]
+        tot = totNumPerClub[index]
+        value = value // tot
+        avgWeightPerClub.append(value)
+        clubs.append(uniqueClubs[index])
+    # List required to build bar graph
+    startIndex = []
+    start = 0
+    for i in range(0,len(uniqueClubs),STEP):
+        startIndex.append(start)
+        start += 0.2
 
+    #creating Bar graph
+    ## fig, ax = plt.subplots(figsize =(10, 7))
+    ## arr = ax.bar(startIndex,avgWeightPerClub,tick_label = clubs,width = 0.15)
+    # displaying values over each bar in the graph
+    ## for rect in arr:
+        ## height = rect.get_height()
+        ## ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,'%d' % int(height),ha='center', va='bottom')
+
+    #Show plot
+    ## plt.show()
+        
 def analyse(data):
     plotAgeDistro(data['Age'])
     plotValueDistro(data['Value'])
     plotFootDistro(data["Preferred Foot"])
     plotReputationDistro(data["International Reputation"])
     plotBodyTypeDistro(data['Body Type'])
+    plotClubsvsAvgWt(data['Club'], data['Weight'])
