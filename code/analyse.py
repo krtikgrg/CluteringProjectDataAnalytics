@@ -101,8 +101,37 @@ def plotFootDistro(footData):
 
     #Show plot
     ## plt.show()
+def plotReputationDistro(repuData):
+    counters = []
 
+    # initialising
+    for i in range(5):
+        counters.append(0)
+
+    # converting scanned floats to integers and counting
+    repuData = repuData.fillna(0)
+    repuData = repuData.astype(int)
+    for reputation in repuData:
+        if reputation>=1 and reputation<=5:
+            counters[reputation-1] += 1
+
+    # defining variables for plotting graph
+    tick_label = [1,2,3,4,5]        
+    startIndex = [1,2,3,4,5]
+
+    #creating Bar graph
+    ## fig, ax = plt.subplots(figsize =(10, 7))
+    ## arr = ax.bar(startIndex,counters,tick_label = tick_label,width = 0.8)
+    #displaying values over each bar in the graph
+    ## for rect in arr:
+        ## height = rect.get_height()
+        ## ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,'%d' % int(height),ha='center', va='bottom')
+
+    #Show plot
+    ## plt.show()
+    
 def analyse(data):
     plotAgeDistro(data['Age'])
     plotValueDistro(data['Value'])
     plotFootDistro(data["Preferred Foot"])
+    plotReputationDistro(data["International Reputation"])
