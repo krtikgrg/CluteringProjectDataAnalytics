@@ -1,0 +1,18 @@
+In plotValueDistro(), making proper bins like
+#determining minimum and maximum worth in the dataset given
+    # minVal = 1e9
+    # maxVal = 0
+    # for val in convertedValData:
+    #     if val<minVal:
+    #         minVal = val
+    #     if val>maxVal:
+    #         maxVal = val
+    
+    # #determining bracket size and making brackets for the pyplot
+    # bracketSize = (maxVal-minVal)//10
+    # valBrackets = []
+    # while minVal<=maxVal:
+    #     valBrackets.append(minVal)
+    #     minVal += bracketSize
+
+    
