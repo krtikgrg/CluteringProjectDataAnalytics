@@ -220,6 +220,62 @@ def plotClubsvsAvgWt(dataClub, dataWt):
     #Show plot
     ## plt.show()
         
+def plotClubsvsAvgHt(dataClub, dataHt):
+    # Getting unique clubs
+    uniqueClubs = set(dataClub)
+    uniqueClubs = (list(uniqueClubs))
+    # Book keeping variables
+    MPCLUBTOINDEX = {}
+    totHeightPerClub = []
+    totNumPerClub = []
+    # initialising
+    for index in range(len(uniqueClubs)):
+        MPCLUBTOINDEX[uniqueClubs[index]] = index
+        totHeightPerClub.append(0)
+        totNumPerClub.append(0)
+    # calculating sum of heights for all the clubs 
+    for index in range(len(dataHt)):
+        if isinstance(dataHt[index], str):
+            height = dataHt[index]
+            club = dataClub[index]
+            foot = int(height[0])
+            inch = int(height[2:len(height)])
+            height = foot*12 + inch
+            height = int(height)
+            totHeightPerClub[MPCLUBTOINDEX[club]] += height
+            totNumPerClub[MPCLUBTOINDEX[club]] += 1
+    
+    # variable that will ultiately be used to draw the graph
+    avgHeightPerClub = []
+    clubs = []
+    # selecting the clubs that are at interval of 75 from the list of all unique clubs
+    # All clubs can also be plotted but it will not be human interpretable 
+    STEP = 75
+    # calculating avg Heights for clubs at an interval of 75
+    for index in range(0,len(totHeightPerClub),STEP):
+        value = totHeightPerClub[index]
+        tot = totNumPerClub[index]
+        value = value // tot
+        avgHeightPerClub.append(value)
+        clubs.append(uniqueClubs[index])
+    # List required to build bar graph
+    startIndex = []
+    start = 0
+    for i in range(0,len(uniqueClubs),STEP):
+        startIndex.append(start)
+        start += 0.2
+
+    #creating Bar graph
+    fig, ax = plt.subplots(figsize =(10, 7))
+    arr = ax.bar(startIndex,avgHeightPerClub,tick_label = clubs,width = 0.15)
+    # displaying values over each bar in the graph
+    for rect in arr:
+        height = rect.get_height()
+        ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,'%d' % int(height),ha='center', va='bottom')
+
+    #Show plot
+    plt.show()       
+
 def analyse(data):
     plotAgeDistro(data['Age'])
     plotValueDistro(data['Value'])
@@ -227,3 +283,4 @@ def analyse(data):
     plotReputationDistro(data["International Reputation"])
     plotBodyTypeDistro(data['Body Type'])
     plotClubsvsAvgWt(data['Club'], data['Weight'])
+    plotClubsvsAvgHt(data['Club'], data['Height'])
