@@ -266,15 +266,15 @@ def plotClubsvsAvgHt(dataClub, dataHt):
         start += 0.2
 
     #creating Bar graph
-    fig, ax = plt.subplots(figsize =(10, 7))
-    arr = ax.bar(startIndex,avgHeightPerClub,tick_label = clubs,width = 0.15)
+    ## fig, ax = plt.subplots(figsize =(10, 7))
+    ## arr = ax.bar(startIndex,avgHeightPerClub,tick_label = clubs,width = 0.15)
     # displaying values over each bar in the graph
-    for rect in arr:
-        height = rect.get_height()
-        ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,'%d' % int(height),ha='center', va='bottom')
+    ## for rect in arr:
+        ## height = rect.get_height()
+        ## ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,'%d' % int(height),ha='center', va='bottom')
 
     #Show plot
-    plt.show()       
+    ## plt.show()       
 
 def analyse(data):
     plotAgeDistro(data['Age'])
