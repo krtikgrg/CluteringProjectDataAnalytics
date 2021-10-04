@@ -9,4 +9,5 @@ data = pd.read_csv(PATH)
 #############  PERFORMING ANALYSIS #############
 analyse(data)
 
+#############  PERFORMING KMEANS   #############
 kMeans(data)
