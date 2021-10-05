@@ -2,6 +2,9 @@ from map import MAPPER
 import copy
 import random
 import json
+import pandas as pd
+
+
 preProcessedData = {}
 diffTwoIndices = [3, 26]
 diffZeroIndices = [15, 16, 17]
@@ -12,6 +15,11 @@ MAPPER_INDEX_TO_DIFF = {}
 gk = 0
 gi = 0
 DATALEN = 0
+
+attrs = []
+
+for i in MAPPER:
+    attrs.append(MAPPER[i])
 
 def designMapperIndexToDiff():
     global diffFiveIndices
@@ -230,6 +238,9 @@ def kMeans(data):
     copyOriginalData(data,accToList)
     makeDiffFive()
     designMapperIndexToDiff()
+    # df = pd.DataFrame(preProcessedData,columns= attrs)
+    # df.to_csv("df.csv")
+    # exit()
     # runKmeansAlgo(3)
     for k in range(3,8,2):
         gk = k
