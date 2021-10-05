@@ -177,7 +177,7 @@ def runKmeansAlgo(k):
     change = 1
     iteration = 1
 
-    while change:
+    while change and iteration<50:
         print("iteration = "+str(iteration))
         NEW_INDEX_TO_CLUSTER = {}
         for i in range(DATALEN):
@@ -206,7 +206,8 @@ def runKmeansAlgo(k):
             for i in range(k):
                 NEW_MAP_CLUSTER_TO_INDICES[i] = []
             for i in range(DATALEN):
-                NEW_MAP_CLUSTER_TO_INDICES[NEW_INDEX_TO_CLUSTER[i]].append(i)
+                if NEW_INDEX_TO_CLUSTER[i]!=-1:
+                    NEW_MAP_CLUSTER_TO_INDICES[NEW_INDEX_TO_CLUSTER[i]].append(i)
             MAP_CLUSTER_TO_INDICES = copy.deepcopy(NEW_MAP_CLUSTER_TO_INDICES)
             MEAN_CLUSTERS = generateMean(MAP_CLUSTER_TO_INDICES)
         iteration += 1
@@ -229,12 +230,12 @@ def kMeans(data):
     copyOriginalData(data,accToList)
     makeDiffFive()
     designMapperIndexToDiff()
-    runKmeansAlgo(3)
-    # for k in range(3,8,2):
-        # gk = k
-        # print()
-        # print()
-        # print("DEBUG::RUNNING K MEANS FOR k="+str(k))
-        # for i in range(5):
-            # gi = i
-            # runKmeansAlgo(k)
+    # runKmeansAlgo(3)
+    for k in range(3,8,2):
+        gk = k
+        print()
+        print()
+        print("DEBUG::RUNNING K MEANS FOR k="+str(k))
+        for i in range(2):
+            gi = i
+            runKmeansAlgo(k)
