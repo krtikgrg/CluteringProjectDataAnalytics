@@ -70,3 +70,4 @@ MAPPER = {
     86:"GKPositioning",
     87:"GKReflexes" 
 }
+# print(len(MAPPER))
