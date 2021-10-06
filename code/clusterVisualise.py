@@ -5,12 +5,12 @@ from matplotlib import pyplot as plt
 import numpy as np
 import random
 import pandas as pd
-PATH = "./CLUSTERS_3_0.json"
+PATH = "bottom_up_reduced_7.json"
 CLUSTER_TO_INDICES = {}
 INDICES_TO_CLUSTER = []
 reduced_data = []
 DATALEN = 0
-uniqueLabels = [0,1,2] #change for different k
+uniqueLabels = [0,1,2,3,4,5,6] #change for different k
 
 def loadCluster():
     global CLUSTER_TO_INDICES
@@ -57,6 +57,7 @@ def plot():
         # print(xcor)
         plt.scatter(xcor,ycor,label=i)
     plt.legend()
+    plt.title("Agglomerative Clustering")
     plt.show()
 
 def runVisualise(data,df1):
