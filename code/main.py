@@ -2,6 +2,7 @@ from analyse import analyse
 from kmeans import kMeans
 from clusterVisualise import runVisualise
 from optimal import optimalK
+from bottomUpAgglomerative import bottomUp,bottomUpReduced
 import pandas as pd
 import numpy as np
 from map import MAPPER
@@ -36,5 +37,20 @@ data = pd.read_csv(PATH)
 
 
 #############  ELBOW AND SILHOUETTE FOR OPTIMAL K  #############
-preProcessedData = pd.read_csv("df.csv")
-optimalK(len(data),preProcessedData)
+# preProcessedData = pd.read_csv("df.csv")
+# optimalK(len(data),preProcessedData)
+
+#############  AGGLOMERATIVE CLUSTERING TRY 1(all features) #############
+# preProcessedData = pd.read_csv("df.csv")
+# bottomUp(preProcessedData)
+
+#############  AGGLOMERATIVE CLUSTERING TRY 2(reduced features using pca) #############
+
+df1 = pd.read_csv("df.csv")
+df1.fillna(0)
+# print(df1)
+for i in MAPPER:
+    df1[MAPPER[i]] = df1[MAPPER[i]].fillna(df1[MAPPER[i]].mode().iloc[0])
+    df1[MAPPER[i]].fillna(0)
+    df1[MAPPER[i]].astype(int)
+bottomUpReduced(df1)
