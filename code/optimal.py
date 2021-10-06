@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from map import MAPPER
 import json
+REDUCIBILITY_FACTOR = 40
 
 figure, axis = plt.subplots(2)
 TRIES_PER_K = 2
@@ -96,13 +97,13 @@ def calcMSE(MEAN_CLUSTERS, MAP_CLUSTER_TO_INDICES,MAP_INDEX_TO_CLUSTER,k):
 def distanceBetweenTwoVectors(i,l):
     global preProcessedData
     curSimilarity = 0
-    for l in MAPPER:
-        attribute = MAPPER[l]
-        if l==22:
+    for k in MAPPER:
+        attribute = MAPPER[k]
+        if k==22:
             if preProcessedData[attribute][i] == preProcessedData[attribute][l]:
                 curSimilarity = curSimilarity + 1
         else:
-            diffVal = MAPPER_INDEX_TO_DIFF[l]
+            diffVal = MAPPER_INDEX_TO_DIFF[k]
             curValOth = preProcessedData[attribute][l]
             lowerLimit = curValOth - diffVal
             upperLimit = curValOth + diffVal
@@ -110,10 +111,12 @@ def distanceBetweenTwoVectors(i,l):
                 curSimilarity += 1
     curSimilarity = curSimilarity/len(MAPPER)
     distance = 1 - curSimilarity
+    # print("DEBUG::RETURNING")
     return distance
 
 def calcMseSil(k,i):
     global DATALEN
+    global REDUCIBILITY_FACTOR
     print("DEBUG::In msesil calc for k = "+str(k)+" and try = "+str(i))
     # global CLUSTERS_TO_INDICES
     PATH = "CLUSTERS_"+str(k)+"_"+str(i)+".json"
@@ -129,17 +132,28 @@ def calcMseSil(k,i):
     for j in T_CLUSTER:
         indices = T_CLUSTER[j]
         for l in indices:
-            MAP_INDEX_TO_CLUSTER[l] = j   
-    
+            MAP_INDEX_TO_CLUSTER[l] = j
+
+    S_CLUSTER = {}
+    for j in T_CLUSTER:
+        indices = T_CLUSTER[j]
+        newIndices = []
+        lgth = len(indices)
+        # print(lgth)
+        for i in range(0,lgth,REDUCIBILITY_FACTOR):
+            newIndices.append(indices[i])
+        S_CLUSTER[j] = newIndices
+        # print(len(newIndices))
+
     # MEAN_CLUSTERS =  generateMean(T_CLUSTER)  #uncomment
     # MSE = calcMSE(MEAN_CLUSTERS, T_CLUSTER, MAP_INDEX_TO_CLUSTER, k) #uncomment
     MSE = 0 #comment
 
     totPoints = 0
     totSilVal = 0
-    for j in T_CLUSTER:
+    for j in S_CLUSTER:
         print("DEBUG::CALCULATING FOR CLUSTER "+str(j))
-        indices = T_CLUSTER[j]
+        indices = S_CLUSTER[j]
         numValuesInCluster = len(indices)
         totPoints += numValuesInCluster
         if numValuesInCluster > 1:
@@ -150,10 +164,10 @@ def calcMseSil(k,i):
                         a += distanceBetweenTwoVectors(i,l)
                 a = a/(totPoints-1)
                 mini = 1e9
-                for m in T_CLUSTER:
+                for m in S_CLUSTER:
                     if m!=j:
                         curclust = 0
-                        indices2 = T_CLUSTER[m]
+                        indices2 = S_CLUSTER[m]
                         szclust = len(indices2)
                         b = 0
                         for l in indices2:
