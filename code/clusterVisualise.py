@@ -5,12 +5,12 @@ from matplotlib import pyplot as plt
 import numpy as np
 import random
 import pandas as pd
-PATH = "up_bottom_reduced_3.json"
+PATH = "db_scan_reduced_18207.json"
 CLUSTER_TO_INDICES = {}
 INDICES_TO_CLUSTER = []
 reduced_data = []
 DATALEN = 0
-uniqueLabels = [0,1,2] #change for different k
+uniqueLabels = [] #change for different k
 
 def loadCluster():
     global CLUSTER_TO_INDICES
@@ -20,12 +20,14 @@ def loadCluster():
 def developList():
     global CLUSTER_TO_INDICES
     global INDICES_TO_CLUSTER
+    global uniqueLabels
     for i in range(DATALEN):
         INDICES_TO_CLUSTER.append(random.randint(0,2))
     for i in CLUSTER_TO_INDICES:
         # print(type(i))
         # print()
         # print()
+        uniqueLabels.append(int(i))
         indices = CLUSTER_TO_INDICES[i]
         for j in indices:
             # print(type(j))
