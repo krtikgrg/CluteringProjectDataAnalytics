@@ -9,7 +9,7 @@ data = []
 
 def dbscan():
     global data
-    db = DBSCAN(eps = 0.65, min_samples=22).fit(data)
+    db = DBSCAN(eps = 0.3, min_samples=35).fit(data)
     CLUSTER_GIVEN = db.labels_
     k = len(CLUSTER_GIVEN)
     CLUSTER_TO_INDICES = {}
