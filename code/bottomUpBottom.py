@@ -2,10 +2,12 @@ from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import pairwise_distances
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
+from math import sqrt
 
 import json
 from map import MAPPER
 
+data = []
 preProcessedData = []
 
 diffTwoIndices = [3, 26]
@@ -101,3 +103,75 @@ def bottomUpReduced(df1):
         # print(len(reduced_data))
         with open("bottom_up_reduced_"+str(k)+".json",'w') as fp:
             json.dump(CLUSTER_TO_INDICES,fp)
+
+def calcMinClusterDistance(cluster):
+    global data
+    maxDist = 0
+    a = -1
+    b = -1
+    for i in cluster:
+        for j in cluster:
+            if i != j:
+                curDist = sqrt((data[i][0]-data[j][0])**2 + (data[i][1]-data[j][1])**2)
+                if curDist > maxDist:
+                    maxDist = curDist
+                    a = i
+                    b = j
+    return maxDist,a,b
+
+def upBottomK(k):
+    global data
+    # listNum = list(range(0,len(data)))
+    # CLUSTERS = {}
+    # CLUSTERS[0] = listNum
+    # lstAvailIndex = 1
+    tempCluster = {}
+    with open("up_bottom_reduced_"+str(k-2)+".json",'r') as fp:
+        tempCluster = json.load(fp)
+    CLUSTERS = {}
+    lstAvailIndex = k-2
+    for i in tempCluster:
+        CLUSTERS[int(i)] = tempCluster[i]
+
+    while lstAvailIndex < k:
+        print("DEBUG::CLUSTERS FORMED TILL NOW "+str(lstAvailIndex))
+        distMax = 0
+        cluster = -1
+        a = -1
+        b = -1
+        for i in CLUSTERS:
+            curmax,ca,cb = calcMinClusterDistance(CLUSTERS[i])
+            if curmax>distMax:
+                distMax = curmax
+                cluster = i
+                a = ca
+                b = cb
+        new1 = []
+        new2 = []
+        for i in CLUSTERS[cluster]:
+            dista = sqrt((data[i][0]-data[a][0])**2 + (data[i][1]-data[a][1])**2)
+            distb = sqrt((data[i][0]-data[b][0])**2 + (data[i][1]-data[b][1])**2)
+            if dista<distb:
+                new1.append(i)
+            else:
+                new2.append(i)
+
+        CLUSTERS[cluster] = new1
+        CLUSTERS[lstAvailIndex] = new2
+        lstAvailIndex += 1
+    
+    with open("up_bottom_reduced_"+str(k)+".json",'w') as fp:
+        json.dump(CLUSTERS,fp)
+
+def upBottomReduced(df1):
+    global data
+    df1 = df1.reset_index()
+    scaling = StandardScaler()
+    scaling.fit(df1)
+    scaled_data = scaling.transform(df1)
+    pca = PCA(n_components = 2)
+    pca.fit(scaled_data)
+    reduced_data = pca.transform(scaled_data)
+    data = reduced_data
+    for k in range(5,8,2):
+        upBottomK(k)

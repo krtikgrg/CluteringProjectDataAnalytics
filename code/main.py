@@ -2,7 +2,8 @@ from analyse import analyse
 from kmeans import kMeans
 from clusterVisualise import runVisualise
 from optimal import optimalK
-from bottomUpAgglomerative import bottomUp,bottomUpReduced
+from bottomUpBottom import bottomUp,bottomUpReduced,upBottomReduced
+from dendogram import dendoGram
 import pandas as pd
 import numpy as np
 from map import MAPPER
@@ -54,3 +55,25 @@ runVisualise(data,df1)
 #     df1[MAPPER[i]].fillna(0)
 #     df1[MAPPER[i]].astype(int)
 # bottomUpReduced(df1)
+
+#############  PLOT DENDOGRAM AGGLOMERATIVE  #############
+
+# df1 = pd.read_csv("df.csv")
+# df1.fillna(0)
+# # print(df1)
+# for i in MAPPER:
+#     df1[MAPPER[i]] = df1[MAPPER[i]].fillna(df1[MAPPER[i]].mode().iloc[0])
+#     df1[MAPPER[i]].fillna(0)
+#     df1[MAPPER[i]].astype(int)
+# dendoGram(df1)
+
+#############  DIVISIVE CLUSTERING  #############
+
+# df1 = pd.read_csv("df.csv")
+# df1.fillna(0)
+# # print(df1)
+# for i in MAPPER:
+#     df1[MAPPER[i]] = df1[MAPPER[i]].fillna(df1[MAPPER[i]].mode().iloc[0])
+#     df1[MAPPER[i]].fillna(0)
+#     df1[MAPPER[i]].astype(int)
+# upBottomReduced(df1)
